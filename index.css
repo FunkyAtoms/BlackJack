@@ -1,0 +1,73 @@
+body {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', Arial, sans-serif;
+    background-image: url("images/table.png");
+    background-size: cover;
+    font-weight: bold;
+    color: white;
+    background-color: #1f513b;
+    text-align: center;
+    margin-top: 120px;
+}
+
+nav {
+    background-color: #333;
+    padding: 10px;
+    display: flex;
+    justify-content:flex-end ;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+nav button{
+    padding: 10px;
+}
+
+h1 {
+    color: goldenrod;
+    clear: both;
+}
+
+#message-el {
+    font-style: italic;
+}
+
+#rules {
+    position: absolute; /* Set the position to absolute */
+    top: 40px; /* Set the top position to 40px */
+    left: 0; /* Set the left position to 0 */
+    width: 100%; /* Set the width to 100% */
+    background-color: #333; /* Set the background color to a dark gray */
+    padding: 20px; /* Add some padding to the rules section */
+    display: none; /* Hide the rules section by default */
+    transition: all 1s ease-in-out; /* Add a transition to the rules section */
+    z-index: 2;
+}
+
+#rules.show{
+    display: block;
+}
+#rules button {
+	float: right;
+	margin-right: 20px;
+}
+
+#rules h4 {
+	text-align: center;
+}
+
+button {
+    color: #016f32;
+    width: 150px;
+    background: goldenrod;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-weight: bold;
+    border: none;
+    border-radius: 2px;
+    margin-bottom: 2px;
+    margin-top: 2px;
+}

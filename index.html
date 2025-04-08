@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body>
+        <nav>
+            <button id="rules-btn">Rules</button>
+            <div id="rules">
+                <h2></h2>
+                <h2>Blackjack Rules</h2>
+                <p>Objective: Get a hand value equal or closest to 21 without going over.</p>
+                <p>Numbered cards are worth their face value.</p>
+                <p>Face cards (Jack, Queen, King) are worth 10 points.</p>
+                <p>Ace can be worth either 1 or 11 points.</p>
+                <p>If your hand value exceeds 21, you are considered "bust" and lose the game.</p>
+                <button id="close-rules-btn">Close</button>
+            </div>
+        </nav>
+        <h1>Blackjack</h1>
+        <p id="message-el">Want to play a round?</p>
+        <p id="cards-el">Cards:</p>
+        <p id="sum-el">Sum:</p>
+        <p id="dealer-cards-el">Dealer's Cards:</p>
+        <p id="dealer-sum-el">Dealer's Sum:</p>
+        <button onclick="startGame()">BET</button>
+        <button id="hit-btn">HIT</button>
+        <button id="stand-btn">STAND</button>
+        <p id="player-el"></p>
+        <script src="index.js"></script>
+        <script src="button.js"></script>
+    </body>
+</html>
