@@ -21,7 +21,7 @@ let dealer = {
 
 playerEl.textContent = player.name + ": $" + player.chips
 
-function getRandomCard() {
+function getRandomCard() { //gets a random card at the beginning of the round. also works for the dealer and when HIT is clicked
     let randomNumber = Math.floor( Math.random()*13 ) + 1
     if (randomNumber > 10) {
         return 10
@@ -38,9 +38,9 @@ function startGame() { //game starts when BET button is clicked
       return
     }
     
-    isAlive = true
-    hasBlackJack = false
-    let firstCard = getRandomCard()
+    isAlive = true //sets the player as "alive" to make the game run
+    hasBlackJack = false //by default, the player does not have a black jack unless achieved
+    let firstCard = getRandomCard() //both player and dealer get 1st two random cards
     let secondCard = getRandomCard()
     playerCards = [firstCard, secondCard]
     playerSum = firstCard + secondCard
@@ -66,7 +66,7 @@ function startGame() { //game starts when BET button is clicked
     }
 }
   
-function renderGame() {
+function renderGame() { //this method is called every button click and event to ensure that the game state is updated and the values are changed
     cardsEl.textContent = "Player's Cards: "
     for (let i = 0; i < playerCards.length; i++) {
       cardsEl.textContent += playerCards[i] + " "
@@ -83,7 +83,7 @@ function renderGame() {
         dealerSumText = "Dealer's Sum: " + dealerSum
     }
     
-    if (playerSum <= 20) {
+    if (playerSum <= 20) { //checks if the player achievs a black jack, or wins against the dealer ending the round
         message = "Do you want to draw a new card?"
     } else if (playerSum === 21) {
         hasBlackJack = true
@@ -92,7 +92,7 @@ function renderGame() {
         isAlive = false
     }
 
-    if (isAlive === false) {
+    if (isAlive === false) { //finalizes the score and displays the result
       if (dealerSum > 21) {
             message = "Dealer bust! You win!"
       } else if (playerSum > 21) {
@@ -111,7 +111,7 @@ function renderGame() {
     document.getElementById("dealer-sum-el").textContent = dealerSumText
 }
   
-function newCard() {
+function newCard() { //new card for every HIT clicked
     if (isAlive === true && hasBlackJack === false) {
         let card = getRandomCard()
         playerSum += card
@@ -135,14 +135,14 @@ function newCard() {
     }
 }
   
-function stand() {
+function stand() { //ends round
     if (isAlive === false) {
         return
     }
 
     isAlive = false
     let dealerSum = dealer.cards[0] + dealer.cards[1]
-    if (playerSum > 21) {
+    if (playerSum > 21) { //finalizes the round giving the results
         message = "You bust! Dealer wins!"
     } else if (dealerSum > 21) {
         message = "Dealer busts! You win!"
@@ -163,5 +163,5 @@ function stand() {
     // document.getElementById("bet-btn").disabled = false;
 }
   
-document.getElementById("hit-btn").addEventListener("click", newCard)
+document.getElementById("hit-btn").addEventListener("click", newCard) //adds event listeners to HIT and STAND buttons.
 document.getElementById("stand-btn").addEventListener("click", stand)
