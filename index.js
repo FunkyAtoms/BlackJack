@@ -63,6 +63,24 @@ function startGame() { //game starts when BET button is clicked
         document.getElementById("bet-btn").disabled = true;
         document.getElementById("hit-btn").disabled = false;
         document.getElementById("stand-btn").disabled = false;
+
+        if (playerSum === 21) {
+            hasBlackJack = true
+            isAlive = false
+            message = "You've got Blackjack! You win!"
+            player.chips += bet * 2
+            playerEl.textContent = player.name + ": $" + player.chips
+            document.getElementById("hit-btn").disabled = true;
+            document.getElementById("stand-btn").disabled = true;
+            document.getElementById("bet-btn").disabled = false;
+        } else if (playerSum > 21) {
+            isAlive = false
+            message = "You bust! Dealer wins!"
+            document.getElementById("hit-btn").disabled = true;
+            document.getElementById("stand-btn").disabled = true;
+            document.getElementById("bet-btn").disabled = false;
+        }
+        renderGame()
     }
 }
   
@@ -79,17 +97,15 @@ function renderGame() { //this method is called every button click and event to 
     let dealerSumText = "Dealer's Sum: ?"
     
     if (isAlive === false) {
-        dealerCardsText = "Dealer's Cards: " + dealer.cards[0] + " " + dealer.cards[1]
-        dealerSumText = "Dealer's Sum: " + dealerSum
+        let dealerSum = dealer.cards[0] + dealer.cards[1]
+        let dealerCardsText = "Dealer's Cards: " + dealer.cards.join(" ")
+        let dealerSumText = "Dealer's Sum: " + dealerSum
+        document.getElementById("dealer-cards-el").textContent = dealerCardsText
+        document.getElementById("dealer-sum-el").textContent = dealerSumText
     }
     
     if (playerSum <= 20) { //checks if the player achievs a black jack, or wins against the dealer ending the round
         message = "Do you want to draw a new card?"
-    } else if (playerSum === 21) {
-        hasBlackJack = true
-        isAlive = false
-    } else if (playerSum > 21) {
-        isAlive = false
     }
 
     if (isAlive === false) { //finalizes the score and displays the result
@@ -117,21 +133,6 @@ function newCard() { //new card for every HIT clicked
         playerSum += card
         playerCards.push(card)
         renderGame()
-        // if (playerSum > 21) {
-        //     isAlive = false
-        //     message = "Bust! Dealer wins!"
-        //     renderGame()
-        //     document.getElementById("hit-btn").disabled = true;
-        //     document.getElementById("stand-btn").disabled = true;
-        //     document.getElementById("bet-btn").disabled = false;
-        // } else if (playerSum === 21) {
-        //     isAlive = false
-        //     message = "You've got Blackjack!"
-        //     renderGame()
-        //     document.getElementById("hit-btn").disabled = true;
-        //     document.getElementById("stand-btn").disabled = true;
-        //     document.getElementById("bet-btn").disabled = false;
-        // }        
     }
 }
   
@@ -143,24 +144,53 @@ function stand() { //ends round
     isAlive = false
     let dealerSum = dealer.cards[0] + dealer.cards[1]
     if (playerSum > 21) { //finalizes the round giving the results
-        message = "You bust! Dealer wins!"
-    } else if (dealerSum > 21) {
-        message = "Dealer busts! You win!"
-        player.chips += bet * 2
-    } else if (dealerSum < playerSum) {
-        message = "You win!"
-        player.chips += bet * 2
-    } else if (dealerSum > playerSum) {
-        message = "Dealer wins!"
+        message = "Bust! Dealer wins!"
+        document.getElementById("dealer-cards-el").textContent = "Dealer's Cards: " + dealer.cards[0] + " " + dealer.cards[1]
+        document.getElementById("dealer-sum-el").textContent = "Dealer's Sum: " + dealerSum
     } else {
-        message = "It's a tie!"
-        player.chips += bet
+        // Dealer's turn
+        document.getElementById("dealer-cards-el").textContent = "Dealer's Cards: " + dealer.cards[0] + " " + dealer.cards[1]
+        document.getElementById("dealer-sum-el").textContent = "Dealer's Sum: " + dealerSum
+
+        let intervalId = setInterval(function() {
+            if (dealerSum < 17) {
+                let card = getRandomCard()
+                dealer.cards.push(card)
+                dealerSum += card
+                document.getElementById("dealer-cards-el").textContent = "Dealer's Cards: " + dealer.cards.join(" ")
+                document.getElementById("dealer-sum-el").textContent = "Dealer's Sum: " + dealerSum
+            } else {
+                clearInterval(intervalId)
+
+                // Check if dealer has won or lost
+                if (dealerSum > 21) {
+                    message = "Dealer busts! You win!"
+                    player.chips += bet * 2
+                } else if (dealerSum < playerSum) {
+                    message = "You win!"
+                    player.chips += bet * 2
+                } else if (dealerSum > playerSum) {
+                    message = "Dealer wins!"
+                } else {
+                    message = "It's a tie!"
+                    player.chips += bet
+                }
+                playerEl.textContent = player.name + ": $" + player.chips
+                renderGame()
+                document.getElementById("hit-btn").disabled = true;
+                document.getElementById("stand-btn").disabled = true;
+                document.getElementById("bet-btn").disabled = false;
+
+                // Reset game state and start new round
+                setTimeout(function() {
+                    document.getElementById("hit-btn").disabled = false;
+                    document.getElementById("stand-btn").disabled = false;
+                    document.getElementById("bet-btn").disabled = true;
+                    startGame();
+                }, 2000);
+            }
+        }, 1000);
     }
-    playerEl.textContent = player.name + ": $" + player.chips
-    renderGame()
-    // document.getElementById("hit-btn").disabled = true;
-    // document.getElementById("stand-btn").disabled = true;
-    // document.getElementById("bet-btn").disabled = false;
 }
   
 document.getElementById("hit-btn").addEventListener("click", newCard) //adds event listeners to HIT and STAND buttons.
